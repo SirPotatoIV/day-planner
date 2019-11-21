@@ -62,13 +62,13 @@ function initiatePlanner() {
         // Stores stringified existing activities object in local storage
         window.localStorage.setItem('existingActivities', existingActivitiesJSON);
     }
-    createFakeLocalStorage();
+    // createFakeLocalStorage();
     
     function checkLocalStorage(){
         // Defines a variable to store existing activities ... unsure if neccessary to define
         let existingActivities = [];
         
-        // If state used to see if there are any existing activities created by the user, that were stored in local storage
+        // If statement used to see if there are any existing activities created by the user, that were stored in local storage and if those activities are from the current date
         if(localStorage.getItem('existingActivities')){
             // Gets existingActivities, which is stringified, and stores it in the variable activitiesStringified
             const activitiesStringified = localStorage.getItem('existingActivities');
@@ -81,11 +81,9 @@ function initiatePlanner() {
             // Compare current date and the date of the existing data. If they are equal, the data is used for rendering the calendar, if not the data is not used.
             if (currentDate === existingDate){
                 // returns the object existingActivities, which contains any activities the user created for that date.
-                console.log(existingActivities);
                 return existingActivities;
             }
             else{
-                console.log("Dates are not the same.")
                 return false;
             };
         }   
@@ -103,6 +101,37 @@ function initiatePlanner() {
     // Start event listener for the save button in every row
     // -- If save button clicked, save value in input and store it in local storage
     // -- Will probably have to make the default text of the input change to the inputted text to make it visible if the page is refreshed
+    
+    function createActivitiesArray() {
+        
+        // Creates a variable that will store either existing activities or a blank set of activities used to fill out the calendar
+        let activities = [];
+        
+        // If there are activities already existing for the current date, they will be stored in the variable activities. If not, an array will be created containing no activities.
+        if (checkLocalStorage()){
+            activities = checkLocalStorage();
+        } else {
+            for(let i=9; i <= 17; i++){
+                let t = i;
+                if(t > 12){
+                    t = t-12;
+                };
+                
+                let singleHour = {
+                    date: currentDateHour().date,
+                    time: t,
+                    activity: ""
+                };
+                activities.push(singleHour);
+            };
+        }
+        console.log(activities);
+    }
+    
+    function renderCalendar(){
+        const activities = createActivitiesArray();
+    }
+    renderCalendar();
 
 }
 initiatePlanner();
