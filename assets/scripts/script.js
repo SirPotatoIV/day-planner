@@ -64,6 +64,7 @@ function initiatePlanner() {
     }
     // createFakeLocalStorage();
     
+    // Checks if the user has created and stored any activites previously. If user has created activities, the activities are returned.
     function checkLocalStorage(){
         // Defines a variable to store existing activities ... unsure if neccessary to define
         let existingActivities = [];
@@ -91,16 +92,7 @@ function initiatePlanner() {
                 console.log("No existing activities"); 
                 return false;
         };
-    }
-    checkLocalStorage();
-    // Render single day calendar view with a row per hour from the hours of 9 AM to 5 PM
-    // -- Top row should be 
-    // -- Each day row should contain 3 columns. Col 1: the hour, Col 2: an input/display of event, and Col 3: a button with a save icon
-    // -- Render current col 2 in row of hours that have passed gray, current hour red, and future hours green
-    // -- Render any previously created/stored events from local storage data that was gotten.
-    // Start event listener for the save button in every row
-    // -- If save button clicked, save value in input and store it in local storage
-    // -- Will probably have to make the default text of the input change to the inputted text to make it visible if the page is refreshed
+    };
     
     // Creates an array that will be used to render the calendar. If an array already exists due to activities already being created that day, function won't be ran
     function createActivitiesArray() {
@@ -108,11 +100,11 @@ function initiatePlanner() {
         // Creates an array that will store either existing activities or a blank set of activities used to fill out the calendar
         let activities = [];
         // Creates said array
-        // -- i starts at 9 and ends at 17 to create the hours from 9am - 5pm
+        // -- i starts at 9 and ends at 17 to create the hours 9am - 5pm
         for(let i=9; i <= 17; i++){
-            // t is used as time
+            // t is used as an integer of time
             let t = i;
-            // converts 24h to 12h
+            // converts t into a string, switches it from 24h to 12h, and adds AM/PM
             if(t > 12){
                 t = t-12;
                 t = (t.toString()+" PM");
@@ -128,20 +120,25 @@ function initiatePlanner() {
             };
             activities.push(singleHour);
         };
-        
-        console.log(activities);
-    }
+    };
     
+    // Render single day calendar view with a row per hour from the hours of 9 AM to 5 PM
+    // -- Each day row should contain 3 columns. Col 1: the hour, Col 2: an input/display of event, and Col 3: a button with a save icon
+    // -- Render current col 2 in row of hours that have passed gray, current hour red, and future hours green
+    // -- Render any previously created/stored events from local storage data that was gotten.
+    // Start event listener for the save button in every row
+    // -- If save button clicked, save value in input and store it in local storage
+    // -- Will probably have to make the default text of the input change to the inputted text to make it visible if the page is refreshed
     function renderCalendar(){
         
         // If there are activities already existing for the current date, they will be stored in the variable activities. If not, an array will be created containing no activities.
         if (checkLocalStorage()){
-            activities = checkLocalStorage();
+            let activities = checkLocalStorage();
         } else {
-            const activities = createActivitiesArray();
+            let activities = createActivitiesArray();
         };
 
-    }
+    };
     renderCalendar();
 
 }
