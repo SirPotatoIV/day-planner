@@ -45,7 +45,7 @@ function initiatePlanner() {
     // Create fake local storage for testing purposes
     function createFakeLocalStorage() {   
         // Creates an object similar to what I expect I will create when the user creates an activity
-        let existingActivitiesObj = [
+        let existingHoursObj = [
             {
                 date: "Wednesday, November 20th",
                 hour: "9",
@@ -60,29 +60,29 @@ function initiatePlanner() {
         // Turns object into a string so it can be stored in local storage
         const existingActivitiesJSON = JSON.stringify(existingActivitiesObj);
         // Stores stringified existing activities object in local storage
-        window.localStorage.setItem('existingActivities', existingActivitiesJSON);
+        window.localStorage.setItem('existingHours', existingActivitiesJSON);
     }
     // createFakeLocalStorage();
     
     // Checks if the user has created and stored any activites previously. If user has created activities, the activities are returned.
     function checkLocalStorage(){
         // Defines a variable to store existing activities ... unsure if neccessary to define
-        let existingActivities = [];
+        let existingHours = [];
         
         // If statement used to see if there are any existing activities created by the user, that were stored in local storage and if those activities are from the current date
-        if(localStorage.getItem('existingActivities')){
-            // Gets existingActivities, which is stringified, and stores it in the variable activitiesStringified
-            const activitiesStringified = localStorage.getItem('existingActivities');
+        if(localStorage.getItem('existingHours')){
+            // Gets existingHours, which is stringified, and stores it in the variable activitiesStringified
+            const hoursStringified = localStorage.getItem('existingHours');
             // Transforms stringified data into an object
-            existingActivities = JSON.parse(activitiesStringified);
+            existingHours = JSON.parse(hoursStringified);
             // Get date of existing data
-            const existingDate = existingActivities[0].date;
+            const existingDate = existingHours[0].date;
             // Get current date
             const currentDate = currentDateHour().date;
             // Compare current date and the date of the existing data. If they are equal, the data is used for rendering the calendar, if not the data is not used.
             if (currentDate === existingDate){
                 // returns the object existingActivities, which contains any activities the user created for that date.
-                return existingActivities;
+                return existingHours;
             }
             else{
                 return false;
@@ -95,10 +95,10 @@ function initiatePlanner() {
     };
     
     // Creates an array that will be used to render the calendar. If an array already exists due to activities already being created that day, function won't be ran
-    function createActivitiesArray() {
+    function createHoursArray() {
         
         // Creates an array that will store either existing activities or a blank set of activities used to fill out the calendar
-        let activities = [];
+        let hours = [];
         // Creates said array
         // -- i starts at 9 and ends at 17 to create the hours 9am - 5pm
         for(let i=9; i <= 17; i++){
@@ -118,7 +118,9 @@ function initiatePlanner() {
                 stringTime: t,
                 activity: ""
             };
-            activities.push(singleHour);
+            hours.push(singleHour);
+            console.log("Create Hours Array:"+hours);
+            return hours;
         };
     };
     
@@ -130,14 +132,29 @@ function initiatePlanner() {
     // -- If save button clicked, save value in input and store it in local storage
     // -- Will probably have to make the default text of the input change to the inputted text to make it visible if the page is refreshed
     function renderCalendar(){
-        
-        // If there are activities already existing for the current date, they will be stored in the variable activities. If not, an array will be created containing no activities.
+        let hours = [];
+        // If hours already exist for the current date, they will be stored in the variable hours. If not, an hours array with no activities will be created.
         if (checkLocalStorage()){
-            let activities = checkLocalStorage();
+            console.log("local storage");
+            let hours = checkLocalStorage();
         } else {
-            let activities = createActivitiesArray();
+            console.log("Create Hours");
+            let hours = createHoursArray();
         };
 
+        const rowEl = document.createElement('tr');
+        const colEl1 = document.createElement('td');
+        const colEl2 = document.createElement('td');
+        const colEl3 = document.createElement('td');
+        const saveButton = document.createElement('button');
+        const activityInput = document.createElement('input');
+        console.log(rowEl, colEl1, saveButton, activityInput);
+
+        // for(i=0; i < hours.length; i++){
+        //     colEl1.innerText = hours.stringTime;
+        // }
+            
+        
     };
     renderCalendar();
 
