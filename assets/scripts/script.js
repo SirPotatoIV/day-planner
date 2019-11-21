@@ -39,19 +39,41 @@ function initiatePlanner() {
     // Check for any previously created events in local storage.
     // -- If they exist store in array
     // -- If they don't exist set array equal to an empty array
- 
+    
+    // Create fake local storage for testing purposes
+    function createFakeLocalStorage() {   
+        // Creates an object similar to what I expect I will create when the user creates an activity
+        let existingActivitiesObj = [
+            {
+                hour: "9",
+                activity: "Crush it!"
+            },
+            {
+                hour: "11",
+                activity: "Keep Crushing it!"
+            }
+        ];
+        // Turns object into a string so it can be stored in local storage
+        const existingActivitiesJSON = JSON.stringify(existingActivitiesObj);
+        // Stores stringified existing activities object in local storage
+        window.localStorage.setItem('existingActivities', existingActivitiesJSON);
+    }
+    createFakeLocalStorage();
+    
     function checkLocalStorage(){
+        // Defines a variable to store existing activities ... unsure if neccessary to define
+        let existingActivities = [];
         
-        const existingActivities = [];
-        
+        // If state used to see if there are any existing activities created by the user, that were stored in local storage
         if(localStorage.getItem('existingActivities')){
-            highscores = localStorage.getItem('existingActivities');
+            activitiesStringified = localStorage.getItem('existingActivities');
             // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse
-            existingActivities = JSON.parse(highscores);
-            console.log("There are existing activities: "+existingActivities);
+            existingActivities = JSON.parse(activitiesStringified);
+            console.log(existingActivities);
+            return existingActivities;
         }   
             else {
-                console.log("No existing activities: "+existingActivities); 
+                console.log("No existing activities"); 
                 return false;
         };
     }
