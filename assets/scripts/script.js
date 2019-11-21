@@ -102,34 +102,45 @@ function initiatePlanner() {
     // -- If save button clicked, save value in input and store it in local storage
     // -- Will probably have to make the default text of the input change to the inputted text to make it visible if the page is refreshed
     
+    // Creates an array that will be used to render the calendar. If an array already exists due to activities already being created that day, function won't be ran
     function createActivitiesArray() {
         
-        // Creates a variable that will store either existing activities or a blank set of activities used to fill out the calendar
+        // Creates an array that will store either existing activities or a blank set of activities used to fill out the calendar
         let activities = [];
+        // Creates said array
+        // -- i starts at 9 and ends at 17 to create the hours from 9am - 5pm
+        for(let i=9; i <= 17; i++){
+            // t is used as time
+            let t = i;
+            // converts 24h to 12h
+            if(t > 12){
+                t = t-12;
+                t = (t.toString()+" PM");
+            }else{
+                t = (t.toString()+" AM");
+            };
+            
+            let singleHour = {
+                date: currentDateHour().date,
+                time: i,
+                stringTime: t,
+                activity: ""
+            };
+            activities.push(singleHour);
+        };
+        
+        console.log(activities);
+    }
+    
+    function renderCalendar(){
         
         // If there are activities already existing for the current date, they will be stored in the variable activities. If not, an array will be created containing no activities.
         if (checkLocalStorage()){
             activities = checkLocalStorage();
         } else {
-            for(let i=9; i <= 17; i++){
-                let t = i;
-                if(t > 12){
-                    t = t-12;
-                };
-                
-                let singleHour = {
-                    date: currentDateHour().date,
-                    time: t,
-                    activity: ""
-                };
-                activities.push(singleHour);
-            };
-        }
-        console.log(activities);
-    }
-    
-    function renderCalendar(){
-        const activities = createActivitiesArray();
+            const activities = createActivitiesArray();
+        };
+
     }
     renderCalendar();
 
