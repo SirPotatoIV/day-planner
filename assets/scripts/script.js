@@ -36,19 +36,23 @@ function initiatePlanner() {
     // The header needs to be updated with the current day any time the page is loaded, therefore the function needs to automatically run everytime the page is loaded
     showCurrentDate();
 
-    // Check for any previously created events in local storage.
-    // -- If they exist store in array
-    // -- If they don't exist set array equal to an empty array
+    // Check for any previously created activities in local storage.
+    // -- If they exist check to see if they are from the current day
+    // -- -- If they are not, return false
+    // -- -- If they are, return the acivities
+    // -- If they don't exist set return false
     
     // Create fake local storage for testing purposes
     function createFakeLocalStorage() {   
         // Creates an object similar to what I expect I will create when the user creates an activity
         let existingActivitiesObj = [
             {
+                date: "Wednesday, November 20th",
                 hour: "9",
                 activity: "Crush it!"
             },
             {
+                date: "Wednesday, November 20th",
                 hour: "11",
                 activity: "Keep Crushing it!"
             }
@@ -66,11 +70,24 @@ function initiatePlanner() {
         
         // If state used to see if there are any existing activities created by the user, that were stored in local storage
         if(localStorage.getItem('existingActivities')){
-            activitiesStringified = localStorage.getItem('existingActivities');
-            // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse
+            // Gets existingActivities, which is stringified, and stores it in the variable activitiesStringified
+            const activitiesStringified = localStorage.getItem('existingActivities');
+            // Transforms stringified data into an object
             existingActivities = JSON.parse(activitiesStringified);
-            console.log(existingActivities);
-            return existingActivities;
+            // Get date of existing data
+            const existingDate = existingActivities[0].date;
+            // Get current date
+            const currentDate = currentDateHour().date;
+            // Compare current date and the date of the existing data. If they are equal, the data is used for rendering the calendar, if not the data is not used.
+            if (currentDate === existingDate){
+                // returns the object existingActivities, which contains any activities the user created for that date.
+                console.log(existingActivities);
+                return existingActivities;
+            }
+            else{
+                console.log("Dates are not the same.")
+                return false;
+            };
         }   
             else {
                 console.log("No existing activities"); 
