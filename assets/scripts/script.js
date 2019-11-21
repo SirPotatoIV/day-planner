@@ -119,9 +119,9 @@ function initiatePlanner() {
                 activity: ""
             };
             hours.push(singleHour);
-            console.log("Create Hours Array:"+hours);
-            return hours;
         };
+        console.log(hours);
+        return hours;
     };
     
     // Render single day calendar view with a row per hour from the hours of 9 AM to 5 PM
@@ -132,27 +132,33 @@ function initiatePlanner() {
     // -- If save button clicked, save value in input and store it in local storage
     // -- Will probably have to make the default text of the input change to the inputted text to make it visible if the page is refreshed
     function renderCalendar(){
-        let hours = [];
+        let hours=[];
         // If hours already exist for the current date, they will be stored in the variable hours. If not, an hours array with no activities will be created.
-        if (checkLocalStorage()){
+        let check = checkLocalStorage();
+        if (check){
             console.log("local storage");
-            let hours = checkLocalStorage();
+            hours = checkLocalStorage;
         } else {
             console.log("Create Hours");
-            let hours = createHoursArray();
+            hours = createHoursArray();
         };
 
-        const rowEl = document.createElement('tr');
-        const colEl1 = document.createElement('td');
-        const colEl2 = document.createElement('td');
-        const colEl3 = document.createElement('td');
-        const saveButton = document.createElement('button');
-        const activityInput = document.createElement('input');
-        console.log(rowEl, colEl1, saveButton, activityInput);
-
-        // for(i=0; i < hours.length; i++){
-        //     colEl1.innerText = hours.stringTime;
-        // }
+        
+        // console.log(rowEl, colEl1, saveButton, activityInput);
+        for(i=0; i < hours.length; i++){
+            const rowEl = document.createElement('tr');
+            const colEl1 = document.createElement('td');
+            const colEl2 = document.createElement('td');
+            const colEl3 = document.createElement('td');
+            const saveButton = document.createElement('button');
+            const activityInput = document.createElement('input');
+            colEl2.append(activityInput);
+            colEl3.append(saveButton);
+            colEl1.innerText = hours[i].stringTime;
+            activityInput.value = hours[i].activity;
+            rowEl.append(colEl1, colEl2, colEl3);
+            document.body.append(rowEl);
+        }
             
         
     };
