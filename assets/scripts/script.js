@@ -3,6 +3,14 @@ function initiatePlanner() {
 
     // Get current date and time
     // -- Homework calls for getting this using Moment.js
+    function currentDateTime() {
+        const UNIXdate = moment();
+        console.log("Date gotten from Moment.js: "+ UNIXdate);
+        const formattedDate = UNIXdate.format("dddd, MMMM Do");
+        console.log("UNIX date formatted using Moment.js: "+formattedDate);
+    }
+    currentDateTime(); 
+    
     // Check for any previously created events in local storage.
     // -- If they exist store in array
     // -- If they don't exist set array equal to an empty array
