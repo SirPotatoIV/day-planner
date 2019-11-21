@@ -23,13 +23,20 @@ function initiatePlanner() {
         return current;
         
     }
-    currentDateHour(); 
+    // currentDateHour(); 
     
     // Update header to show current date
-    function showCurrentDate() {
-
+    function showCurrentDate(){
+        // Recieves the object current from function currentDateHour and stores it in variable DateHour
+        const DateHour = currentDateHour();
+        // Gets the element that displays the day in the header of the calendar
+        const currentDayEl = document.getElementById('currentDay');
+        console.log(currentDayEl);
+        // Changes the inner text of the element that displays the day to the current day.
+        currentDayEl.innerText = DateHour.date;  
     }
     showCurrentDate();
+
     // Check for any previously created events in local storage.
     // -- If they exist store in array
     // -- If they don't exist set array equal to an empty array
