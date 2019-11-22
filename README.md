@@ -6,15 +6,15 @@ This repository is used to create a day planner. The calendar renders based on d
 ## Images
 Starting View:
 
-![Starting View](./assets/start-view-empty.png)
+![Starting View](./assets/example-images/start-view-empty.png)
 
 Starting View with info:
 
-![Question View Example](./assets/start-view-w-info.png)
+![Question View Example](./assets/example-images/start-view-w-info.png)
 
 Full calendar View:
 
-![Example of view when game is over](.full-view-w-info.png)
+![Example of view when game is over](./assets/example-images/full-view-w-info.png)
 
 
 
