@@ -7,13 +7,13 @@ function initiatePlanner() {
         // All moment() and format() is coming from Moment.js library
         
         // Gets current time and date from Moment.js. Moment returns an object full of all the necessary required information.
-        // const momentObj = moment();
+        const momentObj = moment();
         // Converts the converts moment object into the correct date format. Day spelled out, Month Spelled out, and day in number format. Thursday, November 20th
-        // const currentDate = momentObj.format("dddd, MMMM Do");
-        const currentDate = "Wednesday, November 20th";
+        const currentDate = momentObj.format("dddd, MMMM Do");
+        // const currentDate = "Wednesday, November 20th";
         // Converts the moment object into the current hour from 1-24
-        // const currentHour = momentObj.format("k");
-        const currentHour = "22";
+        const currentHour = momentObj.format("k");
+        // const currentHour = "22";
         const current = {
             date: currentDate,
             hour: currentHour
@@ -123,7 +123,7 @@ function initiatePlanner() {
         console.log(hours);
         return hours;
     };
-    
+
     // Render single day calendar view with a row per hour from the hours of 9 AM to 5 PM
     // -- Each day row should contain 3 columns. Col 1: the hour, Col 2: an input/display of event, and Col 3: a button with a save icon
     // -- Render current col 2 in row of hours that have passed gray, current hour red, and future hours green
@@ -136,14 +136,14 @@ function initiatePlanner() {
         // If hours already exist for the current date, they will be stored in the variable hours. If not, an hours array with no activities will be created.
         let check = checkLocalStorage();
         if (check){
-            console.log("local storage");
-            hours = checkLocalStorage;
+            console.log("local storage", check);
+            hours = checkLocalStorage();
         } else {
-            console.log("Create Hours");
+            console.log("Create Hours", check);
             hours = createHoursArray();
         };
 
-        
+        const tableEL = document.createElement('table');
         // console.log(rowEl, colEl1, saveButton, activityInput);
         for(i=0; i < hours.length; i++){
             const rowEl = document.createElement('tr');
@@ -151,16 +151,30 @@ function initiatePlanner() {
             const colEl2 = document.createElement('td');
             const colEl3 = document.createElement('td');
             const saveButton = document.createElement('button');
+            saveButton.innerText = "Save";
             const activityInput = document.createElement('input');
+            activityInput.setAttribute("id","input-"+(i));
+            saveButton.setAttribute("id", "button-"+(i));
+            saveButton.addEventListener('click', function(){ 
+                // const buttonId = event.this.getattribute('id');
+                console.log(event.target.id);
+                const hourInput = event.target.id.replace('button-','input-');
+                const hoursIndex = event.target.id.replace('button-','');
+                console.log(hourInput,hoursIndex);
+                hours[hoursIndex].activity = document.getElementById(hourInput).value;
+                console.log(hours);
+                const hoursStringified = JSON.stringify(hours); 
+                localStorage.setItem('existingHours', hoursStringified);
+
+            });
             colEl2.append(activityInput);
             colEl3.append(saveButton);
             colEl1.innerText = hours[i].stringTime;
             activityInput.value = hours[i].activity;
             rowEl.append(colEl1, colEl2, colEl3);
-            document.body.append(rowEl);
+            tableEL.append(rowEl);
         }
-            
-        
+        document.body.append(tableEL);
     };
     renderCalendar();
 

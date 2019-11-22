@@ -4,6 +4,36 @@ body {
   line-height: 1;
 }
 
+table {
+  margin: auto;
+}
+tr {
+  border-top: 2px black solid;
+  padding: 0px;
+  margin: 0px;
+  height: 50px;
+}
+td {
+  font-size: 18px;
+  padding: 0px;
+  margin: 0px;
+}
+
+input{
+  padding: 0px;
+  border: 0px;
+
+}
+button {
+  display: inline-block;
+  background-color: blue;
+  padding: 0px;
+  margin: 0px;
+  border: 0px;
+  width: 50px;
+  height: 50px;
+}
+
 textarea{
   background: transparent;
   border: none;
