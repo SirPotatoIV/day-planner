@@ -143,38 +143,73 @@ function initiatePlanner() {
             hours = createHoursArray();
         };
 
-        const tableEL = document.createElement('table');
-        // console.log(rowEl, colEl1, saveButton, activityInput);
+        // const tableEL = document.createElement('table');
+        // Creates each row of the calendar
         for(i=0; i < hours.length; i++){
-            const rowEl = document.createElement('tr');
-            const colEl1 = document.createElement('td');
-            const colEl2 = document.createElement('td');
-            const colEl3 = document.createElement('td');
+            // Creates a table row element
+            const rowEl = document.createElement('row');
+            rowEl.classList.add('row');
+            // Creates one of table column elements. Time col
+            const colEl1 = document.createElement('div');
+            colEl1.classList.add('time-block', 'hour', 'col-2');
+            // Creates one of table column elements. Input col
+            const colEl2 = document.createElement('div');
+            colEl2.classList.add('description', 'col-8');
+            // Creates one of table column elements. Button col
+            const colEl3 = document.createElement('div');
+            colEl3.classList.add('button-column', 'col-2');
+            // Creates a button that will be used to save the value of the input
             const saveButton = document.createElement('button');
-            saveButton.innerText = "Save";
+            saveButton.classList.add('saveBtn');
+            // Adds floppy save icon to buttons.
+            // Flavicon used from Font Awesome
+            saveButton.innerHTML = '<i class="far fa-save"></i>';
+            // Creates an input for the user to input activities to save or to display already saved activities
             const activityInput = document.createElement('input');
+            activityInput.classList.add('description')
+            // Creates a unique id for each input. Used later for button event listener
             activityInput.setAttribute("id","input-"+(i));
+            // Creates a unique id for each button. Used later for button event listener
             saveButton.setAttribute("id", "button-"+(i));
+            // updates inner text of column 1 to display the time for that row
+            colEl1.innerText = hours[i].stringTime;
+            // appends input to column 2
+            colEl2.append(activityInput);
+            // appends button to column 3
+            colEl3.append(saveButton);
+            // updates input value with corresponding activity for that row if any exist
+            activityInput.value = hours[i].activity;
+            // appends all three columns to the row
+            rowEl.append(colEl1, colEl2, colEl3);
+            // appends the row to the table. This eventually causes the rows to stack nicely making the complete calendar
+            
+            const containerEl = document.querySelector('.container');
+            containerEl.append(rowEl);
+            containerEl.classList.add('mx-auto')
+
+            // tableEL.append(rowEl);
+            // When a save button is clicked, the text in the corresponding input is saved to local storage
             saveButton.addEventListener('click', function(){ 
-                // const buttonId = event.this.getattribute('id');
-                console.log(event.target.id);
+                // Gets the id of the button clicked from the event. Replaces the text button- with input- in the string.
                 const hourInput = event.target.id.replace('button-','input-');
+                // Gets the id of the button clicked from the event. Removes the text button- in the string.
                 const hoursIndex = event.target.id.replace('button-','');
-                console.log(hourInput,hoursIndex);
+                // Updates the activity property of the array hours (the array that stores all the info for the calendar) at index hoursIndex with the value of the corresponding input
                 hours[hoursIndex].activity = document.getElementById(hourInput).value;
-                console.log(hours);
+                // Stringifies the array that contains all the info for the calendar
                 const hoursStringified = JSON.stringify(hours); 
+                // Updates the local storage with the array that contains all of the calendar info
                 localStorage.setItem('existingHours', hoursStringified);
 
             });
-            colEl2.append(activityInput);
-            colEl3.append(saveButton);
-            colEl1.innerText = hours[i].stringTime;
-            activityInput.value = hours[i].activity;
-            rowEl.append(colEl1, colEl2, colEl3);
-            tableEL.append(rowEl);
         }
-        document.body.append(tableEL);
+            
+        // const containerEl = document.querySelector('.container');
+        // containerEl.append(tableEL);
+        // containerEl.classList.add('mx-auto')
+        
+        
+
     };
     renderCalendar();
 
