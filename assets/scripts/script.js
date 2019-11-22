@@ -21,7 +21,6 @@ function initiatePlanner() {
 
         // Used so that when the function is called the value it returns is the object current.
         return current;
-        
     }
     
     // Update header to show current date
@@ -41,28 +40,6 @@ function initiatePlanner() {
     // -- -- If they are not, return false
     // -- -- If they are, return the acivities
     // -- If they don't exist set return false
-    
-    // Create fake local storage for testing purposes
-    function createFakeLocalStorage() {   
-        // Creates an object similar to what I expect I will create when the user creates an activity
-        let existingHoursObj = [
-            {
-                date: "Wednesday, November 20th",
-                hour: "9",
-                activity: "Crush it!"
-            },
-            {
-                date: "Wednesday, November 20th",
-                hour: "11",
-                activity: "Keep Crushing it!"
-            }
-        ];
-        // Turns object into a string so it can be stored in local storage
-        const existingActivitiesJSON = JSON.stringify(existingActivitiesObj);
-        // Stores stringified existing activities object in local storage
-        window.localStorage.setItem('existingHours', existingActivitiesJSON);
-    }
-    // createFakeLocalStorage();
     
     // Checks if the user has created and stored any activites previously. If user has created activities, the activities are returned.
     function checkLocalStorage(){
@@ -85,11 +62,12 @@ function initiatePlanner() {
                 return existingHours;
             }
             else{
+                // This makes sure data from a previous day is not used.
                 return false;
             };
         }   
             else {
-                console.log("No existing activities"); 
+                // This makes sure if there is no data, a blank array is created.
                 return false;
         };
     };
@@ -103,47 +81,48 @@ function initiatePlanner() {
         // -- i starts at 9 and ends at 17 to create the hours 9am - 5pm
         for(let i=9; i <= 17; i++){
             // t is used as an integer of time
-            let t = i;
+            // let t = i;
             // converts t into a string, switches it from 24h to 12h, and adds AM/PM
-            if(t > 12){
-                t = t-12;
-                t = (t.toString()+" PM");
-            }else{
-                t = (t.toString()+" AM");
-            };
-            
+            // if(t > 11){
+            //     t = t-12;
+            //     t = (t.toString()+" PM");
+            // }else{
+            //     t = (t.toString()+" AM");
+            // };
+            // Creates an object for the hour
+            let t = moment(i, "H").format("h:mm A");
             let singleHour = {
                 date: currentDateHour().date,
                 time: i,
                 stringTime: t,
-                activity: ""
+                activity: " "
             };
+            // Adds the hour object to the array
             hours.push(singleHour);
         };
-        console.log(hours);
+  
+        // Returns array of hours, which contains an object per hour for the hours of 9AM to 5PM
         return hours;
     };
 
     // Render single day calendar view with a row per hour from the hours of 9 AM to 5 PM
     // -- Each day row should contain 3 columns. Col 1: the hour, Col 2: an input/display of event, and Col 3: a button with a save icon
-    // -- Render current col 2 in row of hours that have passed gray, current hour red, and future hours green
-    // -- Render any previously created/stored events from local storage data that was gotten.
+    // -- Render colors of inputs based on hours that have passed gray, current hour white, and future hours green
+    // -- Render any previously created/stored activities in the input from local storage data that was gotten.
     // Start event listener for the save button in every row
     // -- If save button clicked, save value in input and store it in local storage
-    // -- Will probably have to make the default text of the input change to the inputted text to make it visible if the page is refreshed
     function renderCalendar(){
+        
         let hours=[];
         // If hours already exist for the current date, they will be stored in the variable hours. If not, an hours array with no activities will be created.
         let check = checkLocalStorage();
+
         if (check){
-            console.log("local storage", check);
             hours = checkLocalStorage();
         } else {
-            console.log("Create Hours", check);
             hours = createHoursArray();
         };
 
-        // const tableEL = document.createElement('table');
         // Creates each row of the calendar
         for(i=0; i < hours.length; i++){
             // Creates a table row element
@@ -151,22 +130,33 @@ function initiatePlanner() {
             rowEl.classList.add('row');
             // Creates one of table column elements. Time col
             const colEl1 = document.createElement('div');
-            colEl1.classList.add('time-block', 'hour', 'col-2');
+            colEl1.classList.add('time-block', 'hour', 'col-2', 'p-0');
             // Creates one of table column elements. Input col
             const colEl2 = document.createElement('div');
-            colEl2.classList.add('description', 'col-8');
+            colEl2.classList.add('description', 'col-9', 'p-0');
             // Creates one of table column elements. Button col
             const colEl3 = document.createElement('div');
-            colEl3.classList.add('button-column', 'col-2');
+            colEl3.classList.add('button-column', 'col-1', 'p-0');
             // Creates a button that will be used to save the value of the input
             const saveButton = document.createElement('button');
-            saveButton.classList.add('saveBtn');
             // Adds floppy save icon to buttons.
             // Flavicon used from Font Awesome
-            saveButton.innerHTML = '<i class="far fa-save"></i>';
+            saveButton.classList.add('far', 'fa-save', 'saveBtn');
             // Creates an input for the user to input activities to save or to display already saved activities
             const activityInput = document.createElement('input');
             activityInput.classList.add('description')
+            
+            // Styles inputs based on time of day. Past is gray, present is white, future is green
+            if(hours[i].time < moment().add(14,'hours').format("k")){
+                activityInput.classList.add('past')
+            }
+            if(hours[i].time === moment().add(14,'hours').format("k")){
+                activityInput.classList.add('present')
+            }
+            if(hours[i].time > moment().add(14,'hours').format("k")){
+                activityInput.classList.add('future')
+            }
+            
             // Creates a unique id for each input. Used later for button event listener
             activityInput.setAttribute("id","input-"+(i));
             // Creates a unique id for each button. Used later for button event listener
@@ -187,31 +177,61 @@ function initiatePlanner() {
             containerEl.append(rowEl);
             containerEl.classList.add('mx-auto')
 
-            // tableEL.append(rowEl);
             // When a save button is clicked, the text in the corresponding input is saved to local storage
             saveButton.addEventListener('click', function(){ 
                 // Gets the id of the button clicked from the event. Replaces the text button- with input- in the string.
                 const hourInput = event.target.id.replace('button-','input-');
+                
                 // Gets the id of the button clicked from the event. Removes the text button- in the string.
                 const hoursIndex = event.target.id.replace('button-','');
+
                 // Updates the activity property of the array hours (the array that stores all the info for the calendar) at index hoursIndex with the value of the corresponding input
                 hours[hoursIndex].activity = document.getElementById(hourInput).value;
+                
                 // Stringifies the array that contains all the info for the calendar
                 const hoursStringified = JSON.stringify(hours); 
+                
                 // Updates the local storage with the array that contains all of the calendar info
                 localStorage.setItem('existingHours', hoursStringified);
 
             });
-        }
-            
-        // const containerEl = document.querySelector('.container');
-        // containerEl.append(tableEL);
-        // containerEl.classList.add('mx-auto')
-        
-        
-
+        };
     };
     renderCalendar();
 
-}
+    function hourFormatSwitch(){
+        let hourSwitchbtnEl = document.getElementById('hour-switch');
+        
+        hourSwitchbtnEl.addEventListener('click', function(){
+            
+            console.log('switch button clicked',hourSwitchbtnEl.innerText);
+            const timeArray = createHoursArray();
+            if(hourSwitchbtnEl.innerText === "24H"){
+                
+                hourSwitchbtnEl.innerText = "12H";
+                const hourTexts = document.querySelectorAll(".hour");
+                
+                for(let i=0; i < timeArray.length; i++){
+                    hTime = timeArray[i].time;
+                    // Help from tutor on how to use moment to convert time. Struggled to find in documentation.
+                    hhTime = moment(hTime, "H").format("HHmm");
+                    hourTexts[i].innerText = hhTime;
+
+                }
+
+            } else {
+                hourSwitchbtnEl.innerText = "24H";
+                const hourTexts = document.querySelectorAll(".hour");
+               
+                for(let i=0; i < timeArray.length; i++){
+                    backTime = timeArray[i].stringTime;
+                    // Help from tutor on how to use moment to convert time. Struggled to find in documentation.
+                    hourTexts[i].innerText = backTime;
+
+                }
+            }; 
+        });
+    }
+    hourFormatSwitch();
+};
 initiatePlanner();

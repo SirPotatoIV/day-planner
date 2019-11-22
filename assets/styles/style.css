@@ -4,40 +4,6 @@ body {
   line-height: 1;
 }
 
-/* table {
-  margin: auto;
-}
-tr {
-  padding: 0px;
-  margin: 0px;
-  height: 50px;
-}
-td {
-  border: 2px gainsboro solid;
-  font-size: 18px;
-  padding: 0px;
-  margin: 0px;
-}
-
-input{
-  padding: 0px;
-  border: 0px;
-
-} */
-
-i {
-  color: white;
-}
-/* button {
-  display: inline-block;
-  background-color: blue;
-  padding: 0px;
-  margin: 0px;
-  border: 0px;
-  width: 50px;
-  height: 50px;
-} */
-
 textarea{
   background: transparent;
   border: none;
@@ -65,6 +31,7 @@ textarea{
   height: 100%;
   width: 100%;
   border: none;
+  padding-left: 5rem;
 }
 
 .time-block{
@@ -107,13 +74,10 @@ textarea{
   color: white;
   height: 100%;
   width: 100%;
+  font-size: 30px;
 }
 
-.saveBtn i:hover {
-  font-size: 20px;
+.saveBtn:hover {
+  font-size: 40px;
   transition: all .3s ease-in-out;
-}
-
-.col-2, .col-8{
-  padding: 0px;
 }
