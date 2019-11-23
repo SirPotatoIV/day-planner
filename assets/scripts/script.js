@@ -80,16 +80,6 @@ function initiatePlanner() {
         // Creates said array
         // -- i starts at 9 and ends at 17 to create the hours 9am - 5pm
         for(let i=9; i <= 17; i++){
-            // t is used as an integer of time
-            // let t = i;
-            // converts t into a string, switches it from 24h to 12h, and adds AM/PM
-            // if(t > 11){
-            //     t = t-12;
-            //     t = (t.toString()+" PM");
-            // }else{
-            //     t = (t.toString()+" AM");
-            // };
-            // Creates an object for the hour
             let t = moment(i, "H").format("h:mm A");
             let singleHour = {
                 date: currentDateHour().date,
@@ -147,13 +137,13 @@ function initiatePlanner() {
             activityInput.classList.add('description')
             
             // Styles inputs based on time of day. Past is gray, present is white, future is green
-            if(hours[i].time < moment().add(14,'hours').format("k")){
+            if(hours[i].time < moment().format("k")){
                 activityInput.classList.add('past')
             }
-            if(hours[i].time === moment().add(14,'hours').format("k")){
+            if(hours[i].time === moment().format("k")){
                 activityInput.classList.add('present')
             }
-            if(hours[i].time > moment().add(14,'hours').format("k")){
+            if(hours[i].time > moment().format("k")){
                 activityInput.classList.add('future')
             }
             
