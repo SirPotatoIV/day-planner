@@ -76,7 +76,7 @@ function initiatePlanner() {
     function createHoursArray() {
         
         // Creates an array that will store either existing activities or a blank set of activities used to fill out the calendar
-        let hours = [];
+        const hours = [];
         // Creates said array
         // -- i starts at 9 and ends at 17 to create the hours 9am - 5pm
         for(let i=9; i <= 17; i++){
